@@ -28,18 +28,33 @@ const KEYS = [
   "z",
 ]
 
-const Keyboard = () => {
+type KeyboardProps = {
+  activeLetters: string[],
+  inactiveLetters: string[],
+  addGuessedLetter: (letter: string) => void,
+  disabled?: boolean
+}
+const Keyboard = ({ 
+  activeLetters, inactiveLetters, addGuessedLetter, disabled = false }: KeyboardProps) => {
   return (
-    <div 
+    <div
       style={{
-        display: "grid", 
-        gridTemplateColumns: "repeat(auto-fit, minmax(75px, 1fr))",
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(65px, 1fr))",
         gap: ".5rem",
       }}
     >
+      {/* Generate a button for every alphabet in the KEY array */}
       {KEYS.map(key => {
+        const isActive = activeLetters.includes(key)
+        const isInactive = inactiveLetters.includes(key)
         return (
-          <button className={styles.btn} key={key}>{key}</button>
+          <button
+            onClick={() => addGuessedLetter(key)} 
+            className={`${styles.btn} ${isActive ? styles.active : ""} ${isInactive ? styles.inactive : ""}`} 
+            key={key}
+            disabled={isActive || isInactive || disabled}
+          >{key}</button>
         )
       })}
     </div>
